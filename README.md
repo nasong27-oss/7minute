@@ -9,7 +9,7 @@ Node.js 20 이상에서 `npm run dev` 후 http://localhost:3000 을 엽니다.
 
 ## 기능
 
-- 14개 운동, 동작 GIF와 두 가지 핵심 안내, GIF 멈추기/재생
+- 14개 운동, 직접 만든 동작 도식과 두 가지 핵심 안내, 애니메이션 멈추기/재생
 - 7분: 운동 20초 + 전환 10초 × 14 (마지막 10초는 마무리 휴식)
 - 원본 시간: 운동 30초 + 전환 10초 × 14 = 9분 20초
 - 시작/일시정지/재개, 이전/다음 동작, 동작 선택, 초기화 확인
@@ -28,8 +28,4 @@ Node.js 20 이상에서 `npm run dev` 후 http://localhost:3000 을 엽니다.
 
 ## 제한
 
-음성 및 화면 꺼짐 방지는 브라우저/기기 지원에 따릅니다. 백그라운드 운동 진행은 지원하지 않으며 타이머가 자동 일시정지합니다. 플랭크는 움직임이 없는 자세 유지 이미지입니다. 홀드 스쿼트와 사이드 플랭크의 GIF는 진입 자세 참고용이며 운동 중에는 안내대로 자세를 유지합니다. GIF 멈추기로 원하는 자세를 정지해 볼 수 있습니다.
-
-## Media credits
-
-ExerciseDB V1 / AscendAPI (https://oss.exercisedb.dev/docs), 180p GIFs for personal non-commercial use. Metadata and corresponding media sourced from https://github.com/Alejor-Dev/ejercicios-dataset. Reverse lunge, kettlebell deadlift and static plank reference: Fitness Programer (https://fitnessprogramer.com). Media remains the property of its respective owners; no commercial redistribution license is granted by this project.
+음성 및 화면 꺼짐 방지는 브라우저/기기 지원에 따릅니다. 백그라운드 운동 진행은 지원하지 않으며 타이머가 자동 일시정지합니다. 플랭크·사이드 플랭크·홀드 스쿼트는 정적인 자세 유지 도식입니다. 동작 도식은 방향과 핵심 자세를 설명하는 단순화된 벡터 안내이며, 실제 인체 비율을 재현한 이미지가 아닙니다. 외부 운동 이미지나 GIF를 불러오지 않습니다.
