@@ -1,6 +1,8 @@
 # Motion asset production
 
-The app uses local Animated WebP images, not embedded video players. Each dynamic asset runs at 24 fps with a three-second loop. The source is AI-created key poses, interpolated with FFmpeg optical-flow motion estimation. These are illustrative animations, not live-action recordings.
+The app uses local Animated WebP images, not embedded video players. Dynamic assets now use only original AI-created pose frames at 5 fps, encoded at quality 82. Optical-flow interpolation was removed because it warped bodies and equipment between independently generated poses. No blending or synthetic in-between frames are used. The motion is stepped, not live-action video.
+
+Most movements return through the exact same poses in reverse, without repeating the endpoint. Lunge and alternating shoulder taps retain their complete cycles. Each asset keeps fixed canvas dimensions. Hold exercises remain static. Asset URLs use a revision query to invalidate the previous broken animations.
 
 Style prompt: natural photorealistic male trainer, navy athletic T-shirt, charcoal shorts and black trainers; normal athletic build, white seamless studio; no exposed anatomical muscle overlays. Same person and camera across chronological 4-by-3 pose sheets.
 
