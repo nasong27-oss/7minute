@@ -152,6 +152,28 @@ header{padding:16px 24px;max-width:1100px}.brand{font-size:19px}.tag{font-size:1
  .ring{width:clamp(34px,calc(100dvh - 230px),48px);height:clamp(34px,calc(100dvh - 230px),48px)}.ring-inner{width:calc(100% - 8px);height:calc(100% - 8px)}.seconds{font-size:22px}.phase{font-size:8px;margin-top:0}
  .controls button{height:36px}.controls .primary{font-size:12px}
 }
+/* Larger phone countdown uses the available control-column space. */
+@media (orientation:landscape) and (min-width:640px) and (max-width:1000px) and (max-height:500px) and (hover:none) and (pointer:coarse){
+ .stage{container-type:size;container-name:phone-stage;grid-template-rows:auto auto minmax(0,1fr) 40px}
+ .ring{width:clamp(64px,calc(100dvh - 210px),112px);height:clamp(64px,calc(100dvh - 210px),112px);max-width:100%;aspect-ratio:1}
+ .ring-inner{width:calc(100% - 12px);height:calc(100% - 12px)}
+ .seconds{font-size:clamp(34px,calc(100dvh * .17 - 12px),54px);font-weight:750}.phase{font-size:10px;margin-top:3px}
+ .controls{grid-template-columns:38px minmax(0,1fr) 38px;gap:5px}.controls button{min-width:0;height:40px}
+ .controls .primary{font-size:12px}
+ .stage>h2{font-size:15px;line-height:17px}
+ .media-controls{color:#bcc5bf}.media-controls #motionToggle{min-height:28px;padding:4px 0}
+}
+@media (orientation:landscape) and (min-width:640px) and (max-width:1000px) and (max-height:340px) and (hover:none) and (pointer:coarse){
+ .stage{grid-template-rows:auto 0 minmax(0,1fr) 40px}
+ .ring{width:clamp(52px,calc(100dvh - 210px),100px);height:clamp(52px,calc(100dvh - 210px),100px)}
+ .seconds{font-size:clamp(28px,calc(100dvh * .18 - 14px),44px)}.phase{font-size:9px;margin-top:2px}
+}
+@container phone-stage (max-height:170px){
+ .ring{width:64px;height:64px}.ring-inner{width:54px;height:54px}.seconds{font-size:32px}.phase{font-size:8px;margin-top:1px}
+}
+@container phone-stage (max-height:135px){
+ .ring{width:48px;height:48px}.ring-inner{width:40px;height:40px}.seconds{font-size:25px}.phase{font-size:7px;margin-top:0}
+}
 </style></head><body>
 <header><div class="brand">QUIET <b>SEVEN.</b></div></header>
 <nav class="routine-tabs" role="tablist" aria-label="운동 루틴"><button id="tab-weighted" role="tab" aria-selected="true" aria-controls="workoutPanel" tabindex="0">바벨 · 케틀벨</button><button id="tab-body" role="tab" aria-selected="false" aria-controls="workoutPanel" tabindex="-1">맨몸</button></nav>
