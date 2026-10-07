@@ -1,0 +1,164 @@
+{
+  "rdl": {
+    "page": "https://musclewiki.com/exercise/barbell-romanian-deadlift",
+    "title": [
+      "Barbell Romanian Deadlift Exercise Guide - Glutes Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Barbell-barbell-romanian-deadlift-side_dnNh5UH.mp4",
+      "/api-next/videos/male-Barbell-barbell-romanian-deadlift-front.mp4",
+      "/api-next/videos/female-Barbell-barbell-romanian-deadlift-front.mp4",
+      "/api-next/videos/female-Barbell-barbell-romanian-deadlift-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Barbell-barbell-romanian-deadlift-side.mp4"
+  },
+  "row": {
+    "page": "https://musclewiki.com/exercise/barbell-bent-over-row",
+    "title": [
+      "Barbell Bent Over Row Exercise Guide - Lats Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-barbell-bent-over-row-front.mp4",
+      "/api-next/videos/male-barbell-bent-over-row-side.mp4",
+      "/api-next/videos/female-barbell-bent-over-row-front.mp4",
+      "/api-next/videos/female-barbell-bent-over-row-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-barbell-bent-over-row-side.mp4"
+  },
+  "goblet": {
+    "page": "https://musclewiki.com/exercise/kettlebell-goblet-squat",
+    "title": [
+      "Kettlebell Goblet Squat Exercise Guide - Glutes Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Kettlebells-kettlebell-goblet-squat-front.mp4",
+      "/api-next/videos/male-Kettlebells-kettlebell-goblet-squat-side.mp4",
+      "/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-front.mp4",
+      "/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4"
+  },
+  "press": {
+    "page": "https://musclewiki.com/exercise/barbell-overhead-press",
+    "title": [
+      "Barbell Overhead Press Exercise Guide - Shoulders Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Barbell-barbell-overhead-press-front.mp4",
+      "/api-next/videos/male-Barbell-barbell-overhead-press-side.mp4",
+      "/api-next/videos/female-Barbell-barbell-overhead-press-front.mp4",
+      "/api-next/videos/female-Barbell-barbell-overhead-press-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Barbell-barbell-overhead-press-front.mp4"
+  },
+  "kbdeadlift": {
+    "page": "https://tenor.com/view/kettlebell-deadlift-fit-girl-booty-lab-workout-gif-16846405",
+    "selected": "https://media1.tenor.com/m/ORwvXk7ClIYAAAAC/kettlebell-deadlift.gif"
+  },
+  "bridge": {
+    "page": "https://musclewiki.com/exercise/barbell-glute-bridge",
+    "title": [
+      "Barbell Glute Bridge Exercise Guide - Glutes Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-barbell-glute-bridge-front.mp4",
+      "/api-next/videos/male-barbell-glute-bridge-side.mp4",
+      "/api-next/videos/female-barbell-glute-bridge-front.mp4",
+      "/api-next/videos/female-barbell-glute-bridge-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-barbell-glute-bridge-side.mp4"
+  },
+  "pushup": {
+    "page": "https://musclewiki.com/exercise/push-up",
+    "title": [
+      "Push Up Exercise Guide - Chest Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Bodyweight-push-up-front.mp4",
+      "/api-next/videos/male-Bodyweight-push-up-side.mp4",
+      "/api-next/videos/female-Bodyweight-push-up-front.mp4",
+      "/api-next/videos/female-Bodyweight-push-up-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Bodyweight-push-up-side.mp4"
+  },
+  "lunge": {
+    "page": "https://musclewiki.com/exercise/bodyweight-alternating-reverse-lunges",
+    "title": [
+      "Bodyweight Alternating Reverse Lunges Exercise Guide - Glutes Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Bodyweight-bodyweight-alternating-reverse-lunges-side.mp4",
+      "/api-next/videos/male-Bodyweight-bodyweight-alternating-reverse-lunges-front.mp4",
+      "/api-next/videos/female-Bodyweight-bodyweight-alternating-reverse-lunges-front.mp4",
+      "/api-next/videos/female-Bodyweight-bodyweight-alternating-reverse-lunges-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Bodyweight-bodyweight-alternating-reverse-lunges-side.mp4"
+  },
+  "plank": {
+    "page": "https://musclewiki.com/exercise/forearm-plank",
+    "title": [
+      "Forearm Plank Exercise Guide - Abdominals Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Bodyweight-forearm-plank-front.mp4",
+      "/api-next/videos/male-Bodyweight-forearm-plank-side.mp4",
+      "/api-next/videos/female-Bodyweight-forearm-plank-front.mp4",
+      "/api-next/videos/female-Bodyweight-forearm-plank-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Bodyweight-forearm-plank-side.mp4"
+  },
+  "sideplank": {
+    "page": "https://musclewiki.com/exercise/elbow-side-plank",
+    "title": [
+      "Elbow Side Plank Exercise Guide - Obliques Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-bodyweight-elbow-side-plank-front.mp4",
+      "/api-next/videos/male-bodyweight-elbow-side-plank-side.mp4",
+      "/api-next/videos/female-bodyweight-elbow-side-plank-front.mp4",
+      "/api-next/videos/female-bodyweight-elbow-side-plank-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-bodyweight-elbow-side-plank-front.mp4"
+  },
+  "shouldertap": {
+    "page": "https://giphy.com/stickers/Openfit-transparent-giMxIlDEcu8BnWfx1r",
+    "selected": "Openfit shared GIF downloaded from the page"
+  },
+  "deadbug": {
+    "page": "https://musclewiki.com/exercise/dead-bug",
+    "selected": "https://musclewiki.com/api-next/videos/female-Bodyweight-dead-bug-side.mp4"
+  },
+  "squat-hold": {
+    "page": "https://musclewiki.com/exercise/kettlebell-goblet-squat",
+    "title": [
+      "Kettlebell Goblet Squat Exercise Guide - Glutes Workout | MuscleWiki",
+      "MuscleWiki",
+      "MuscleWiki Logo"
+    ],
+    "videos": [
+      "/api-next/videos/male-Kettlebells-kettlebell-goblet-squat-front.mp4",
+      "/api-next/videos/male-Kettlebells-kettlebell-goblet-squat-side.mp4",
+      "/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-front.mp4",
+      "/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4"
+    ],
+    "selected": "https://musclewiki.com/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4"
+  }
+}
