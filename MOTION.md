@@ -6,11 +6,11 @@ Real filmed demonstrations of clothed people replace all generated pose sheets a
 
 MuscleWiki videos are shared with original in-frame branding and per-exercise links. Its copyright notice permits branded video sharing with links for non-profit/academic use: https://musclewiki.com/terms . This app is a personal, non-commercial workout timer; commercial distribution requires a separate rights review. Image thumbnails from MuscleWiki were not copied into the app.
 
-The kettlebell deadlift is Booty Lab's shared Tenor GIF; shoulder taps are Openfit's shared GIPHY sticker. Source attribution is visible in the app. No watermarks or branding were removed.
+The kettlebell deadlift uses MuscleWiki's floor-based sumo deadlift demonstration in the same gym setting as the other clips. Shoulder taps use Openfit's shared GIPHY sticker with its bottom caption area cropped out (434x246), preserving all body pixels and visible attribution in the app. Source attribution is visible in the app. No watermarks or branding were removed.
 
 ## Processing
 
-Real frames sampled at 15 fps and scaled to at most 480px width; source branding and colors remain. Loop boundaries selected from similar captured poses, without invented intermediate frames. Two short shared GIFs play at one-third source speed so the movements are legible. The squat hold is a captured bottom position (1.7s) of the goblet squat, not a generated pose. Left side plank mirrors the right-side demonstration.
+Real frames sampled at 15 fps and scaled to at most 480px width; source branding and colors remain. Loop boundaries selected from similar captured poses, without invented intermediate frames. The short shoulder-tap GIF plays at one-third source speed so the movements are legible. The squat hold is a captured bottom position (1.7s) of the goblet squat, not a generated pose. Left side plank mirrors the right-side demonstration.
 
 - rdl: https://musclewiki.com/exercise/barbell-romanian-deadlift
   Source: https://musclewiki.com/api-next/videos/female-Barbell-barbell-romanian-deadlift-side.mp4
@@ -20,8 +20,8 @@ Real frames sampled at 15 fps and scaled to at most 480px width; source branding
   Source: https://musclewiki.com/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4
 - press: https://musclewiki.com/exercise/barbell-overhead-press
   Source: https://musclewiki.com/api-next/videos/female-Barbell-barbell-overhead-press-front.mp4
-- kbdeadlift: https://tenor.com/view/kettlebell-deadlift-fit-girl-booty-lab-workout-gif-16846405
-  Source: https://media1.tenor.com/m/ORwvXk7ClIYAAAAC/kettlebell-deadlift.gif
+- kbdeadlift: https://musclewiki.com/exercise/kettlebell-sumo-deadlift
+  Source: https://musclewiki.com/api-next/videos/female-Kettlebells-kettlebell-sumo-deadlift-side.mp4
 - bridge: https://musclewiki.com/exercise/barbell-glute-bridge
   Source: https://musclewiki.com/api-next/videos/female-barbell-glute-bridge-side.mp4
 - pushup: https://musclewiki.com/exercise/push-up
