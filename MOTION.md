@@ -4,9 +4,9 @@ Real filmed demonstrations of clothed people replace all generated pose sheets a
 
 ## Sources and permitted use
 
-MuscleWiki videos are shared with original in-frame branding and per-exercise links. Its copyright notice permits branded video sharing with links for non-profit/academic use: https://musclewiki.com/terms . This app is a personal, non-commercial workout timer; commercial distribution requires a separate rights review. Image thumbnails from MuscleWiki were not copied into the app.
+MuscleWiki videos are shared with original in-frame branding. Per-exercise source links are retained in this document. Its copyright notice permits branded video sharing with links for non-profit/academic use: https://musclewiki.com/terms . This app is a personal, non-commercial workout timer; commercial distribution requires a separate rights review. Image thumbnails from MuscleWiki were not copied into the app.
 
-The kettlebell deadlift uses MuscleWiki's floor-based sumo deadlift demonstration in the same gym setting as the other clips. Shoulder taps use Openfit's shared GIPHY sticker with its bottom caption area cropped out (434x246), preserving all body pixels and visible attribution in the app. Source attribution is visible in the app. No watermarks or branding were removed.
+The kettlebell deadlift uses MuscleWiki's floor-based sumo deadlift demonstration in the same gym setting as the other clips. Shoulder taps use Openfit's shared GIPHY sticker with its bottom caption area cropped out (434x246), preserving all body pixels and source attribution in this document. Source attribution is retained in this document. No watermarks or branding were removed.
 
 ## Processing
 
