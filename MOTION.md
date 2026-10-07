@@ -38,3 +38,25 @@ Real frames sampled at 15 fps and scaled to at most 480px width; source branding
   Source: https://musclewiki.com/api-next/videos/female-Bodyweight-dead-bug-side.mp4
 - squat-hold: https://musclewiki.com/exercise/kettlebell-goblet-squat
   Source: https://musclewiki.com/api-next/videos/female-Kettlebells-kettlebell-goblet-squat-side.mp4
+
+## Bodyweight routine
+
+Same captured-motion processing. No equipment, jumps, or running in place. Bodyweight squat hold is a captured bottom-position frame. Shared bodyweight clips reuse the existing assets.
+
+- bw-squat: https://musclewiki.com/exercise/bodyweight-squat
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-bodyweight-squat-side.mp4
+
+- bw-superman: https://musclewiki.com/exercise/supermans
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-supermans-side.mp4
+
+- bw-bird: https://musclewiki.com/exercise/bird-dog
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-bird-dog-side.mp4
+
+- bw-bridge: https://musclewiki.com/exercise/glute-bridge
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-glute-bridge-side.mp4
+
+- bw-hinge: https://musclewiki.com/exercise/good-mornings
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-good-mornings-side.mp4
+
+- bw-arms: https://musclewiki.com/exercise/forward-arm-circle
+  Source: https://musclewiki.com/api-next/videos/female-Bodyweight-forward-arm-circle-side.mp4
