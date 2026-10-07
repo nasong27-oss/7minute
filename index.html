@@ -51,6 +51,39 @@ header{padding:16px 24px;max-width:1100px}.brand{font-size:19px}.tag{font-size:1
 #reset:hover{background:#38423b;border-color:#c0c9c3}#reset:active{background:#414b45}
 @media(max-width:360px){.settings{column-gap:10px}.settings #sound{min-width:67px;padding-left:8px;font-size:11px}}
 @media(prefers-reduced-motion:no-preference){.switch-track>span{transition:transform .15s ease}}
+
+/* Landscape: the entire routine fits the viewport; completed steps stack as text. */
+@media (orientation:landscape) and (min-width:640px){
+ main{display:grid;grid-template-columns:minmax(0,1fr) 280px;align-items:start}
+ aside{position:sticky;top:12px;height:calc(100dvh - 160px);min-height:0;margin:0;border:0}
+ .routine-details[open]{height:100%;display:flex;flex-direction:column;min-height:0}
+ .routine-details summary{flex:none;padding:8px 0 12px}
+ .routine-details>.note{flex:none;font-size:11px;margin:8px 0 0}
+ .routine{--completed-row:24px;display:grid;grid-template-columns:1fr;grid-template-rows:var(--routine-rows);flex:1;min-height:0;gap:2px;align-content:start}
+ .exercise{min-height:0;overflow:hidden;padding:3px 8px;gap:7px;border-radius:7px}
+ .exercise>span:nth-child(2){min-width:0;flex:1}.exercise strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:17px}
+ .exercise small{font-size:11px;line-height:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .exercise .number{flex:none;width:22px;font-size:12px}.exercise .time{font-size:11px}
+ .exercise.completed{padding:1px 8px 1px 37px;background:transparent;border-color:transparent}
+ .exercise.completed .number,.exercise.completed small,.exercise.completed .time{display:none}
+ .exercise.completed strong{font-size:12px;font-weight:400;color:#a8b5b2}
+}
+@media (orientation:landscape) and (min-width:640px) and (max-height:700px){
+ header{padding:10px 18px}.routine-tabs{margin-top:6px}.routine-tabs button{padding:8px 16px}
+ main{padding-top:12px;gap:16px;grid-template-columns:minmax(0,1fr) 250px}
+ aside{height:calc(100dvh - 114px)}
+ .routine-details summary{font-size:15px;padding:0 0 8px;line-height:20px}.routine-details>.note{display:none}
+ .routine{--completed-row:clamp(12px,calc((100dvh - 170px)/14),22px);gap:1px}
+ .exercise{padding:1px 6px;gap:5px}.exercise small{display:none}.exercise strong{font-size:12px;line-height:15px}
+ .exercise.completed{padding:0 6px 0 33px}.exercise.completed strong{font-size:11px;line-height:14px}
+}
+@media (orientation:landscape) and (min-width:640px) and (max-height:420px){
+ header{padding:6px 16px}.brand{font-size:17px}.routine-tabs{margin-top:3px}.routine-tabs button{padding:6px 12px;font-size:13px}
+ main{padding-top:8px;grid-template-columns:minmax(0,1fr) 230px;gap:12px}aside{height:calc(100dvh - 91px)}
+ .routine-details summary{font-size:13px;line-height:17px;padding-bottom:5px}
+ .routine{--completed-row:clamp(11px,calc((100dvh - 130px)/14),18px)}
+ .exercise strong,.exercise.completed strong{font-size:11px;line-height:13px}.exercise .number,.exercise .time{font-size:10px}.exercise .time{display:none}
+}
 </style></head><body>
 <header><div class="brand">QUIET <b>SEVEN.</b></div></header>
 <nav class="routine-tabs" role="tablist" aria-label="운동 루틴"><button id="tab-weighted" role="tab" aria-selected="true" aria-controls="workoutPanel" tabindex="0">바벨 · 케틀벨</button><button id="tab-body" role="tab" aria-selected="false" aria-controls="workoutPanel" tabindex="-1">맨몸</button></nav>
@@ -90,14 +123,14 @@ bodyExercises[9]=["글루트 브리지", "맨몸 · 둔근", ["등 윗부분과 
 bodyExercises[11]=["홀드 스쿼트", "맨몸 · 하체", ["편안한 깊이에서 앉은 자세 유지", "발바닥을 붙이고 숨을 참지 않기"]];bodyAssets[11]='real-bw-squat-hold.webp?v=body1';bodySources[11]={"url": "https://musclewiki.com/exercise/bodyweight-squat", "label": "MuscleWiki"};
 const routines={weighted:{exercises:weightedExercises,assets:weightedAssets,sources:weightedSources,summary:'14동작 · 바벨 15kg · 케틀벨 12kg'},body:{exercises:bodyExercises,assets:bodyAssets,sources:bodySources,summary:'14동작 · 기구 없이 · 점프 없이'}};
 let activeRoutine='weighted',exercises=weightedExercises,gifAssets=weightedAssets,motionSources=weightedSources;
-const routineStates={};
+const routineStates={};let completedSteps=new Set();
 function switchRoutine(key){
  if(key===activeRoutine)return;
  if(running)pause();
- routineStates[activeRoutine]={index,phase,left,started,done,work};
+ routineStates[activeRoutine]={index,phase,left,started,done,work,completed:[...completedSteps]};
  activeRoutine=key;const r=routines[key];exercises=r.exercises;gifAssets=r.assets;motionSources=r.sources;
  const state=routineStates[key]||{index:0,phase:'work',left:work,started:false,done:false,work};
- ({index,phase,left,started,done,work}=state);running=false;lastBeep=-1;mediaIndex=-1;releaseWake();
+ ({index,phase,left,started,done,work}=state);completedSteps=new Set(state.completed||[]);running=false;lastBeep=-1;mediaIndex=-1;releaseWake();
  $('routineSummary').textContent=r.summary;$('workoutPanel').setAttribute('aria-labelledby','tab-'+key);
  for(const k of ['weighted','body']){const t=$('tab-'+k);t.setAttribute('aria-selected',String(k===key));t.tabIndex=k===key?0:-1;}
  $('wake').textContent=started&&!done?'일시정지 상태입니다. 계속하기를 눌러 이어서 진행하세요.':'운동 시작 후 지원 기기에서 화면 켜짐을 유지합니다.';
@@ -147,15 +180,16 @@ function render(){
  $('nextName').textContent=done?'수고하셨습니다':finalRest?'오늘의 운동 완료':index<13?exercises[index+1][0]:'마무리 휴식';
  $('nextLabel').textContent=done?'완료':finalRest?'마무리 후':phase==='rest'?'곧 시작':'다음 동작';
  $('totalProgress').style.width=((1-remaining()/total())*100)+'%';
- document.querySelectorAll('.exercise').forEach((b,i)=>{b.classList.toggle('active',i===display);b.setAttribute('aria-current',i===display?'step':'false')})
+ document.querySelectorAll('.exercise').forEach((b,i)=>{const complete=completedSteps.has(i);b.classList.toggle('active',!done&&i===display);b.classList.toggle('completed',complete);b.setAttribute('aria-current',!done&&i===display?'step':'false');b.setAttribute('aria-label',(complete?'완료 · ':'')+String(i+1).padStart(2,'0')+' '+exercises[i][0]);b.title=exercises[i][0]});
+ $('routine').style.setProperty('--routine-rows',exercises.map((_,i)=>completedSteps.has(i)?'var(--completed-row)':'minmax(0,1fr)').join(' '));
 }
 function announce(){const t=done?'운동을 완료했습니다':phase==='work'?exercises[index][0]+' 시작':index===13?'마무리 휴식':'10초 휴식. 다음은 '+exercises[index+1][0];$('announce').textContent=t;beep(done?'done':phase==='work'?'start':'rest')}
-function reset(){running=false;started=false;done=false;index=0;phase='work';left=work;lastBeep=-1;releaseWake();render()}
-function advance(){if(phase==='work'){phase='rest';left=10}else if(index<13){index++;phase='work';left=work}else{done=true;running=false;left=0;releaseWake()}lastBeep=-1;announce()}
+function reset(){completedSteps.clear();running=false;started=false;done=false;index=0;phase='work';left=work;lastBeep=-1;releaseWake();render()}
+function advance(){if(phase==='work'){completedSteps.add(index);phase='rest';left=10}else if(index<13){index++;phase='work';left=work}else{done=true;running=false;left=0;releaseWake()}lastBeep=-1;announce()}
 function tick(){if(!running)return;const now=performance.now();while(now>=deadline&&running){advance();deadline+=duration()*1000}if(running)left=Math.max(0,(deadline-now)/1000);const sec=Math.ceil(left);if(running&&sec<=3&&sec>0&&lastBeep!==sec){lastBeep=sec;beep()}render()}
 function pause(){tick();running=false;releaseWake();render()}
 function start(){if(done)reset();if(running){pause();return}if(!audio&&(sound))audio=new(window.AudioContext||window.webkitAudioContext)();audio?.resume();running=true;const first=!started;started=true;deadline=performance.now()+left*1000;keepAwake();if(first)announce();render()}
-function jump(i){if(i<0||i>13)return;running=false;releaseWake();index=i;phase='work';left=work;done=false;started=true;lastBeep=-1;render()}
+function jump(i){if(i<0||i>13)return;completedSteps.delete(i);running=false;releaseWake();index=i;phase='work';left=work;done=false;started=true;lastBeep=-1;render()}
 $('start').onclick=start;$('prev').onclick=()=>jump(index-1);$('next').onclick=()=>index<13?jump(index+1):(()=>{phase='rest';left=10;deadline=performance.now()+10000;render()})();for(const seconds of [20,30])$('duration'+seconds).onclick=()=>{if(started&&!done)return;work=seconds;reset();list()};$('sound').onclick=()=>{sound=!sound;$('sound').setAttribute('aria-checked',String(sound));$('soundLabel').textContent='소리 '+(sound?'켜짐':'꺼짐');if(sound){audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume();beep()}};$('reset').onclick=()=>{if(!started||done)reset();else{if(running)pause();$('confirm').showModal()}};$('confirmReset').onclick=()=>{reset();$('confirm').close()};$('cancelReset').onclick=()=>$('confirm').close();
 function list(){$('routine').replaceChildren(...exercises.map((e,i)=>{const b=document.createElement('button');b.className='exercise';b.innerHTML='<span class="number">'+String(i+1).padStart(2,'0')+'</span><span><strong>'+e[0]+'</strong><small>'+e[1]+'</small></span><span class="time">'+work+'초</span>';b.onclick=()=>{jump(i);$('name').scrollIntoView({block:'center',behavior:'smooth'})};return b}));render()}
 // The complete routine stays expanded by default on every screen size.
