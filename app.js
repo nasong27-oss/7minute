@@ -354,6 +354,26 @@ function renderSession() {
     if ((!rest && i === S.index) || (rest && i === S.index + 1)) s.classList.add('now');
   });
   $('prevBtn').disabled = S.index === 0 && S.left > S.work - 3;
+  renderFinalCount(sec, rest, finale);
+}
+
+/* last 3 seconds of every work / rest segment */
+let finalShown = 0;
+function renderFinalCount(sec, rest, finale) {
+  const show = S.running && !S.countdown && sec > 0 && sec <= 3;
+  const box = $('finalCount');
+  if (!show) { if (finalShown) { box.hidden = true; finalShown = 0; } return; }
+  if (finalShown === sec) return;
+  finalShown = sec;
+  const nextLabel = rest
+    ? (finale ? '다음 · 운동 완료' : `다음 · ${S.list[S.index + 1].name}`)
+    : (S.index === COUNT - 1 ? '다음 · 마무리 휴식' : '다음 · 휴식');
+  $('finalNext').textContent = nextLabel;
+  const num = $('finalNum');
+  num.textContent = sec;
+  num.classList.remove('tick'); void num.offsetWidth; num.classList.add('tick');
+  box.querySelectorAll('.final-dots i').forEach((d, i) => d.classList.toggle('on', i < 4 - sec));
+  box.hidden = false;
 }
 
 function finish() {

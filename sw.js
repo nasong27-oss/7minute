@@ -1,5 +1,5 @@
 // Offline cache: app shell precached, motion images cached on first view.
-const VERSION = 'qs-v1';
+const VERSION = 'qs-v2';
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'data.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png'];
 
 self.addEventListener('install', e => {

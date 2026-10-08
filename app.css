@@ -180,6 +180,21 @@ body.rest{--bg:#161c21;--panel:#1f272e;--line:#33404b;--line-soft:#2c3740;--text
 .countdown-label{font-size:13px;letter-spacing:4px;color:var(--accent)}
 .countdown-num{font-size:min(44vw,220px);font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
 
+/* last-3-seconds overlay: covers the content, keeps top bar, progress and controls usable */
+.session-top,.segments,.controls{position:relative;z-index:6}
+.final-count{position:absolute;inset:0;z-index:4;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6dvh,16px);
+  background:radial-gradient(ellipse at center,color-mix(in srgb,var(--bg) 82%,transparent) 0%,color-mix(in srgb,var(--bg) 96%,transparent) 70%);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:final-in .25s ease-out}
+.final-next{font-size:13px;font-weight:500;letter-spacing:3px;color:var(--accent);text-align:center;padding:0 24px}
+.final-num{font-size:min(56vw,34dvh,300px);font-weight:300;line-height:.9;letter-spacing:-.04em;color:var(--accent);font-variant-numeric:tabular-nums}
+.final-num.tick{animation:final-tick .9s cubic-bezier(.2,.7,.2,1)}
+.final-dots{display:flex;gap:10px}
+.final-dots i{width:8px;height:8px;border-radius:50%;border:1px solid var(--accent);transition:background .2s}
+.final-dots i.on{background:var(--accent)}
+@keyframes final-in{from{opacity:0}to{opacity:1}}
+@keyframes final-tick{0%{transform:scale(1.18);opacity:.35}30%{transform:scale(1);opacity:1}100%{transform:scale(.97);opacity:1}}
+@media (orientation:landscape) and (max-height:560px){.final-num{font-size:min(30vw,44dvh,240px)}}
+
 /* landscape / wide: media left, info right */
 @media (orientation:landscape) and (max-height:560px), (min-width:900px) and (min-height:561px){
   .view.session{max-width:1100px}
