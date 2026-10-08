@@ -1,0 +1,18 @@
+{
+  "name": "Quiet Seven · 7분 홈트",
+  "short_name": "Quiet Seven",
+  "description": "좁은 공간에서 조용하게. 14개 동작과 함께하는 7분 운동 타이머.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#16110e",
+  "theme_color": "#16110e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

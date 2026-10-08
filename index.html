@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16110e">
+<meta name="description" content="좁은 공간에서 조용하게. 14개 동작과 함께하는 7분 운동 타이머.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quiet Seven">
+<title>Quiet Seven · 7분 홈트</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-view="ready">
+
+<!-- ① 준비 -->
+<div class="view ready" id="readyView">
+  <header class="topbar">
+    <div class="brand">QUIET SEVEN</div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="voiceToggle" aria-pressed="false" aria-label="음성 안내">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/><path class="off-slash" d="M4 4l16 16"/></svg>
+      </button>
+      <button class="icon-btn sound-btn" aria-pressed="false" aria-label="소리">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m22 9-6 6M16 9l6 6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="운동 루틴">
+    <button role="tab" id="tab-weighted" data-routine="weighted" aria-selected="true">바벨 · 케틀벨</button>
+    <button role="tab" id="tab-body" data-routine="body" aria-selected="false" tabindex="-1">맨몸</button>
+  </nav>
+
+  <main class="ready-body">
+    <section class="routine-head">
+      <div class="row-between">
+        <h1 id="routineTitle">전신 루틴</h1>
+        <button class="text-btn" id="editWeights">무게 편집</button>
+      </div>
+      <div class="chips" id="routineChips"></div>
+      <div class="durations" role="group" aria-label="운동 시간">
+        <button class="duration" data-work="20" aria-pressed="true"><strong>7분</strong><small>운동 20초 · 휴식 10초</small></button>
+        <button class="duration" data-work="30" aria-pressed="false"><strong>9분 20초</strong><small>운동 30초 · 휴식 10초</small></button>
+      </div>
+    </section>
+
+    <section class="resume" id="resumeCard" hidden>
+      <div class="caption">이어서 하기</div>
+      <div class="resume-row">
+        <div>
+          <div class="resume-name" id="resumeName"></div>
+          <div class="muted small" id="resumeMeta"></div>
+        </div>
+        <div class="resume-actions">
+          <button class="text-btn muted" id="discardResume">처음부터</button>
+          <button class="pill-btn primary small-pill" id="resumeBtn">이어서</button>
+        </div>
+      </div>
+    </section>
+
+    <button class="first-card" id="firstCard">
+      <img id="firstImg" alt="" width="96" height="54" decoding="async">
+      <span class="first-text">
+        <span class="caption">FIRST</span>
+        <span class="first-name" id="firstName"></span>
+        <span class="muted small">이후 13동작</span>
+      </span>
+    </button>
+
+    <details class="routine-list">
+      <summary><span>전체 14동작</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <ol id="routineList"></ol>
+      <p class="note">동작을 누르면 그 동작부터 시작합니다.</p>
+    </details>
+
+    <p class="note">시작 전 가볍게 몸을 풀어주세요. 무게가 부담되면 맨몸으로 진행하고, 통증이 있으면 중단하세요.</p>
+  </main>
+
+  <div class="ready-cta">
+    <button class="pill-btn cta" id="startBtn">운동 시작<span class="divider"></span><span id="startTotal">7:00</span></button>
+    <p class="note center" id="wakeNote">시작하면 화면 켜짐을 유지합니다</p>
+  </div>
+</div>
+
+<!-- ②③ 운동 · 휴식 -->
+<div class="view session" id="sessionView" data-phase="work">
+  <header class="session-top">
+    <button class="icon-btn ghost" id="exitBtn" aria-label="운동 종료">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="remaining">남은 시간 <strong id="remaining">7:00</strong></div>
+    <button class="icon-btn ghost sound-btn" aria-pressed="false" aria-label="소리">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m22 9-6 6M16 9l6 6"/></svg>
+    </button>
+  </header>
+
+  <div class="segments" id="segments" aria-hidden="true"></div>
+
+  <div class="session-grid">
+    <div class="media-col">
+      <div class="media" id="media">
+        <img id="pose" alt="" decoding="async">
+        <canvas id="poseStill" hidden aria-hidden="true"></canvas>
+        <button class="media-toggle" id="motionToggle" aria-pressed="false" aria-label="시연 멈추기">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="play" d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <p class="media-hint" id="mediaHint"></p>
+    </div>
+
+    <div class="info-col">
+      <div class="clock">
+        <div class="phase-label" id="phaseLabel">WORK · 01 / 14</div>
+        <div class="phase-word" id="phaseWord">휴식</div>
+        <div class="seconds" id="seconds" aria-hidden="true">20</div>
+        <div class="phase-bar"><div id="phaseBar"></div></div>
+        <div class="rest-hint" id="restHint">호흡을 고르고 다음 자세를 준비하세요</div>
+      </div>
+
+      <div class="title-block">
+        <h2 id="exName"></h2>
+        <div class="muted" id="exMeta"></div>
+      </div>
+
+      <ul class="tips" id="tips"></ul>
+
+      <!-- 휴식: 다음 동작 카드 -->
+      <div class="next-card" id="nextCard">
+        <div class="row-between"><span class="caption" id="nextCardLabel">NEXT · 02 / 14</span><span class="muted small" id="nextCardTime">20초</span></div>
+        <div class="next-card-body">
+          <img id="nextImg" alt="" decoding="async">
+          <div>
+            <div class="next-card-name" id="nextCardName"></div>
+            <div class="muted small" id="nextCardMeta"></div>
+            <div class="next-card-tip" id="nextCardTip"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="next-row" id="nextRow"><span class="caption">NEXT</span><strong id="nextName"></strong></div>
+
+      <div class="controls work-controls">
+        <button class="round-btn" id="prevBtn" aria-label="이전 동작"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM19 5v14L9 12z"/></svg></button>
+        <button class="pill-btn primary" id="toggleBtn"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5H10v14H6.5zM14 5h3.5v14H14z"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg><span id="toggleLabel">일시정지</span></button>
+        <button class="round-btn" id="nextBtn" aria-label="다음 동작"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM5 5v14l10-7z"/></svg></button>
+      </div>
+      <div class="controls rest-controls">
+        <button class="pill-btn outline" id="addRestBtn">+10초</button>
+        <button class="round-btn" id="restToggleBtn" aria-label="일시정지"><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5H10v14H6.5zM14 5h3.5v14H14z"/></svg><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button>
+        <button class="pill-btn primary" id="skipRestBtn"><span id="skipRestLabel">바로 시작</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM5 5v14l10-7z"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="countdown" id="countdown" hidden aria-hidden="true">
+    <div class="countdown-label" id="countdownLabel">준비</div>
+    <div class="countdown-num" id="countdownNum">3</div>
+  </div>
+  <p class="paused-note" id="sessionNote" role="status"></p>
+</div>
+
+<!-- ④ 완료 -->
+<div class="view done" id="doneView">
+  <div class="segments full" aria-hidden="true" id="doneSegments"></div>
+  <div class="done-hero">
+    <div class="done-check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+    <div class="caption accent">COMPLETE</div>
+    <h2>오늘의 운동 완료</h2>
+    <div class="muted" id="doneRoutine"></div>
+  </div>
+  <div class="stats">
+    <div><strong id="doneTime">7:00</strong><span>운동 시간</span></div>
+    <div><strong id="doneCount">14</strong><span>완료 동작</span></div>
+    <div><strong id="doneSplit">20 / 10</strong><span>운동 / 휴식 초</span></div>
+  </div>
+  <div class="done-actions">
+    <button class="pill-btn cta" id="doneBtn">완료</button>
+    <button class="text-btn muted big" id="againBtn">한 번 더 하기</button>
+  </div>
+</div>
+
+<div class="sr" aria-live="polite" id="announce"></div>
+
+<dialog id="exitDialog" aria-labelledby="exitTitle">
+  <h2 id="exitTitle">운동을 끝낼까요?</h2>
+  <p>진행 상태는 저장되어 나중에 이어서 할 수 있습니다.</p>
+  <div class="dialog-actions">
+    <button class="pill-btn outline" id="exitCancel">계속하기</button>
+    <button class="pill-btn primary" id="exitConfirm">종료</button>
+  </div>
+</dialog>
+
+<dialog id="weightDialog" aria-labelledby="weightTitle">
+  <h2 id="weightTitle">무게 편집</h2>
+  <form method="dialog" id="weightForm">
+    <label class="field"><span>바벨</span><input type="number" inputmode="decimal" min="0" max="200" step="0.5" id="barbellInput"><em>kg</em></label>
+    <label class="field"><span>케틀벨</span><input type="number" inputmode="decimal" min="0" max="100" step="0.5" id="kettlebellInput"><em>kg</em></label>
+    <div class="dialog-actions">
+      <button class="pill-btn outline" value="cancel" formnovalidate>취소</button>
+      <button class="pill-btn primary" value="save" id="weightSave">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
