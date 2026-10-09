@@ -1,7 +1,19 @@
 # Quiet Seven
 
 좁은 공간에서 조용하게 하는 7분 전신 운동 타이머. 외부 런타임 의존성 없는 정적 PWA입니다.
-[nasong27-oss/7minute](https://github.com/nasong27-oss/7minute)의 개편판입니다.
+## 저장소 운영
+
+| 저장소 | 용도 | 배포 |
+|---|---|---|
+| [nasong27-oss/quiet-seven](https://github.com/nasong27-oss/quiet-seven) | 수정 · 테스트 | Vercel (테스트) |
+| [nasong27-oss/7minute](https://github.com/nasong27-oss/7minute) | 운영 | https://7minute.vercel.app |
+
+두 저장소는 같은 커밋 히스토리를 공유합니다. quiet-seven에서 수정 · 확인한 뒤 운영으로 올립니다.
+
+```
+git remote add prod https://github.com/nasong27-oss/7minute   # 최초 1회
+git push prod main                                              # 운영 반영
+```
 
 ## 실행
 
