@@ -6,7 +6,8 @@ const ASSET_DIR = 'assets/';
 const STORE_KEY = 'quiet-seven:v1';
 
 /* ---------- settings & saved progress (no completion history) ---------- */
-const defaults = { routine: 'weighted', work: 20, sound: false, voice: false, weights: { barbell: 15, kettlebell: 12 }, progress: { weighted: null, body: null } };
+const THEMES = ['lava', 'champagne', 'emerald'];
+const defaults = { routine: 'weighted', work: 20, sound: false, voice: false, theme: 'lava', seenSafety: false, weights: { barbell: 15, kettlebell: 12 }, progress: { weighted: null, body: null } };
 function loadStore() {
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
@@ -18,6 +19,7 @@ const store = loadStore();
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch {} }
 if (!ROUTINES[store.routine]) store.routine = 'weighted';
 if (![20, 30].includes(store.work)) store.work = 20;
+if (!THEMES.includes(store.theme)) store.theme = 'lava';
 
 /* ---------- helpers ---------- */
 const fmt = s => { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
@@ -101,54 +103,102 @@ function clearProgress(key = S.key) { store.progress[key] = null; save(); }
 /* ---------- views ---------- */
 function setView(v) {
   document.body.dataset.view = v;
-  document.body.classList.toggle('rest', v === 'session' && S.phase === 'rest');
+  setRest(v === 'session' && S.phase === 'rest');
   window.scrollTo(0, 0);
+}
+const themeMeta = document.querySelector('meta[name=theme-color]');
+function setRest(on) {
+  if (document.body.classList.contains('rest') === on && themeMeta.dataset.t === store.theme) return;
+  document.body.classList.toggle('rest', on);
+  themeMeta.dataset.t = store.theme;
+  themeMeta.content = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#0f0f11';
+}
+function applyTheme() {
+  document.body.dataset.theme = store.theme;
+  themeMeta.dataset.t = '';
+  setRest(document.body.classList.contains('rest'));
+  for (const b of document.querySelectorAll('[data-theme-opt]')) b.setAttribute('aria-checked', String(b.dataset.themeOpt === store.theme));
 }
 
 /* ---------- ① ready ---------- */
+const rhythmEls = [];
+for (let i = 0; i < COUNT; i++) {
+  const w = document.createElement('i'), r = document.createElement('i');
+  w.className = 'w'; if (i === COUNT - 1) r.className = 'last';
+  rhythmEls.push(w, r);
+}
+$('rhythm').append(...rhythmEls);
+const workLabel = w => w === 20 ? '7분' : '9분 20초';
+
 function renderReady() {
   const key = store.routine, r = ROUTINES[key], list = routineExercises(key);
-  for (const t of document.querySelectorAll('.tabs [role=tab]')) {
+  const p = store.progress[key];
+  for (const t of document.querySelectorAll('[data-routine]')) {
     const on = t.dataset.routine === key;
     t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
   }
-  $('routineTitle').textContent = r.title;
-  const chips = key === 'weighted'
-    ? [`바벨 ${kg(store.weights.barbell)}kg`, `케틀벨 ${kg(store.weights.kettlebell)}kg`, '14동작']
-    : ['기구 없이', '점프 없이', '14동작'];
-  $('routineChips').replaceChildren(...chips.map(c => Object.assign(document.createElement('span'), { textContent: c })));
-  $('editWeights').hidden = key !== 'weighted';
   for (const b of document.querySelectorAll('.duration')) b.setAttribute('aria-pressed', String(+b.dataset.work === store.work));
-  $('startTotal').textContent = fmt(totalFor(store.work));
-  $('firstImg').src = list[0].src; $('firstImg').alt = list[0].name + ' 시연';
-  $('firstName').textContent = list[0].name;
 
-  const p = store.progress[key];
-  $('resumeCard').hidden = !p;
+  $('selectors').hidden = !!p; $('stripBlock').hidden = !!p; $('resumeBlock').hidden = !p;
+  $('discardResume').hidden = !p;
+  $('startLabel').textContent = p ? '이어서 시작' : '운동 시작';
+  $('rhythm').classList.toggle('progress', !!p);
+
   if (p) {
     const i = p.phase === 'rest' && p.index < COUNT - 1 ? p.index + 1 : p.index;
-    $('resumeName').textContent = `${pad(i + 1)} / 14 · ${list[i].name}`;
-    $('resumeMeta').textContent = `남은 시간 ${fmt((COUNT - 1 - p.index) * (p.work + REST_SECONDS) + p.left + (p.phase === 'work' ? REST_SECONDS : 0))} · 운동 ${p.work}초`;
+    const e = list[i], done = new Set(p.completed || []);
+    const left = (COUNT - 1 - p.index) * (p.work + REST_SECONDS) + p.left + (p.phase === 'work' ? REST_SECONDS : 0);
+    $('heroCaption').textContent = 'RESUME · 남은 시간';
+    $('heroTime').textContent = fmt(left);
+    $('heroSub').textContent = `${pad(i + 1)} / 14 · ${e.name}부터`;
+    rhythmEls.forEach((el, k) => {
+      const n = k >> 1, isWork = !(k & 1);
+      el.classList.toggle('ok', done.has(n) && (isWork || n < p.index || (n === p.index && p.phase === 'rest')));
+      el.classList.toggle('now', isWork && n === i);
+    });
+    $('rhythmLeft').textContent = `${done.size}동작 완료`;
+    $('rhythmRight').textContent = `${r.label} · ${workLabel(p.work)}`;
+    $('resumeImg').src = e.src; $('resumeImg').alt = e.name + ' 시연';
+    $('resumeThumb').classList.toggle('mirror', !!e.mirror);
+    $('resumeLabel').textContent = `NEXT · ${pad(i + 1)}`;
+    $('resumeName').textContent = e.name;
+    $('resumeMeta').textContent = `${e.meta} · ${p.work}초`;
+    const restCount = COUNT - 1 - i;
+    $('resumeRest').textContent = restCount > 0 ? `${pad(i + 2)} ${list[i + 1].name} 외 ${restCount - 1}개` : '마지막 동작';
+    $('resumeSplit').textContent = `${p.work}초 / ${REST_SECONDS}초`;
+  } else {
+    $('heroCaption').textContent = `TODAY · ${r.title}`;
+    $('heroTime').textContent = fmt(totalFor(store.work));
+    $('heroSub').textContent = `14동작 · 운동 ${store.work}초 / 휴식 ${REST_SECONDS}초`;
+    rhythmEls.forEach(el => el.classList.remove('ok', 'now'));
+    $('rhythmLeft').innerHTML = '<span class="k w"></span>운동<span class="k r"></span>휴식';
+    $('rhythmRight').textContent = '마지막 10초 마무리';
+    $('weightsText').textContent = key === 'weighted'
+      ? `바벨 ${kg(store.weights.barbell)}kg · 케틀벨 ${kg(store.weights.kettlebell)}kg` : '기구 없이 · 점프 없이';
+    $('weightsText').disabled = key !== 'weighted';
+    $('strip').replaceChildren(...list.map((e, i) => {
+      const li = document.createElement('li'), b = document.createElement('button');
+      b.innerHTML = `<span class="thumb${e.mirror ? ' mirror' : ''}"><img loading="lazy" decoding="async" alt=""><b>${pad(i + 1)}</b></span><span class="nm"></span>`;
+      b.querySelector('img').src = e.src;
+      b.querySelector('.nm').textContent = e.name;
+      b.setAttribute('aria-label', `${pad(i + 1)} ${e.name}부터 시작`);
+      b.onclick = () => startSession({ index: i });
+      li.append(b); return li;
+    }));
   }
-
-  $('routineList').replaceChildren(...list.map((e, i) => {
-    const li = document.createElement('li'), b = document.createElement('button');
-    b.innerHTML = `<span class="num">${pad(i + 1)}</span><span><span class="nm"></span><span class="mt"></span></span><span class="sec">${store.work}초</span>`;
-    b.querySelector('.nm').textContent = e.name; b.querySelector('.mt').textContent = e.meta;
-    b.setAttribute('aria-label', `${pad(i + 1)} ${e.name}부터 시작`);
-    b.onclick = () => startSession({ index: i });
-    li.append(b); return li;
-  }));
+  $('safetyNote').hidden = !!store.seenSafety;
   syncToggles();
 }
 function syncToggles() {
   for (const b of document.querySelectorAll('.sound-btn')) {
     b.setAttribute('aria-pressed', String(store.sound)); b.setAttribute('aria-label', store.sound ? '소리 끄기' : '소리 켜기');
   }
-  $('voiceToggle').setAttribute('aria-pressed', String(store.voice));
-  $('voiceToggle').setAttribute('aria-label', store.voice ? '음성 안내 끄기' : '음성 안내 켜기');
+  $('soundSwitch').setAttribute('aria-checked', String(store.sound));
+  $('voiceSwitch').setAttribute('aria-checked', String(store.voice));
+  $('barbellVal').textContent = kg(store.weights.barbell);
+  $('kettlebellVal').textContent = kg(store.weights.kettlebell);
 }
-if (!('wakeLock' in navigator)) $('wakeNote').textContent = '이 브라우저는 화면 켜짐 유지를 지원하지 않아요. 자동 잠금을 확인해 주세요';
+if (!('wakeLock' in navigator)) { $('wakeNote').textContent = '이 브라우저는 화면 켜짐 유지를 지원하지 않아요. 자동 잠금을 확인해 주세요'; $('wakeNote').hidden = false; }
 
 /* ---------- ②③ session ---------- */
 const segs = Array.from({ length: COUNT }, () => document.createElement('i'));
@@ -168,6 +218,7 @@ function startSession({ index = 0, resume = null } = {}) {
     clearProgress();
   }
   S.running = false; S.lastBeep = -1; S.mediaKey = '';
+  if (!store.seenSafety) { store.seenSafety = true; save(); }
   ensureAudio();
   if (store.voice && 'speechSynthesis' in window) { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance('')); } catch {} }
   keepAwake();
@@ -307,8 +358,7 @@ function renderSession() {
   const shown = rest ? upcoming : cur;
 
   $('sessionView').dataset.phase = S.phase;
-  document.body.classList.toggle('rest', rest);
-  document.querySelector('meta[name=theme-color]').content = rest ? '#161c21' : '#16110e';
+  setRest(rest);
 
   const sec = Math.ceil(S.left);
   $('seconds').textContent = sec;
@@ -378,8 +428,7 @@ function renderFinalCount(sec, rest, finale) {
 
 function finish() {
   S.running = false; cancelCountdown(); releaseWake(); clearProgress();
-  document.body.classList.remove('rest');
-  document.querySelector('meta[name=theme-color]').content = '#16110e';
+  setRest(false);
   $('doneRoutine').textContent = `${ROUTINES[S.key].title} · ${ROUTINES[S.key].label}`;
   $('doneTime').textContent = fmt(totalFor(S.work));
   $('doneCount').textContent = S.completed.size;
@@ -398,7 +447,7 @@ function exitSession() {
 function cancelExit() { $('exitDialog').close(); if (resumeAfterDialog) resume(); }
 
 /* ---------- wiring ---------- */
-for (const t of document.querySelectorAll('.tabs [role=tab]')) {
+for (const t of document.querySelectorAll('[data-routine]')) {
   t.onclick = () => { store.routine = t.dataset.routine; save(); renderReady(); };
   t.onkeydown = e => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
@@ -409,19 +458,38 @@ for (const t of document.querySelectorAll('.tabs [role=tab]')) {
   };
 }
 for (const b of document.querySelectorAll('.duration')) b.onclick = () => { store.work = +b.dataset.work; save(); renderReady(); };
-for (const b of document.querySelectorAll('.sound-btn')) b.onclick = () => {
+function toggleSound() {
   store.sound = !store.sound; save(); syncToggles();
   if (store.sound) { ensureAudio(); beep(); }
-};
-$('voiceToggle').onclick = () => {
+}
+for (const b of document.querySelectorAll('.sound-btn')) b.onclick = toggleSound;
+$('soundSwitch').onclick = toggleSound;
+$('voiceSwitch').onclick = () => {
   store.voice = !store.voice; save(); syncToggles();
   if (store.voice) speak('음성 안내를 켰어요');
   else window.speechSynthesis?.cancel();
 };
-$('startBtn').onclick = () => startSession();
-$('firstCard').onclick = () => startSession();
-$('resumeBtn').onclick = () => startSession({ resume: store.progress[store.routine] });
+$('startBtn').onclick = () => {
+  const p = store.progress[store.routine];
+  p ? startSession({ resume: p }) : startSession();
+};
 $('discardResume').onclick = () => { clearProgress(store.routine); renderReady(); };
+$('safetyOk').onclick = () => { store.seenSafety = true; save(); $('safetyNote').hidden = true; };
+
+const sheet = $('settingsSheet');
+const openSettings = () => { syncToggles(); applyTheme(); sheet.showModal(); };
+$('settingsBtn').onclick = openSettings;
+$('weightsText').onclick = openSettings;
+$('settingsClose').onclick = () => sheet.close();
+sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); });
+for (const b of sheet.querySelectorAll('.stepper button')) b.onclick = () => {
+  const w = b.dataset.w, max = w === 'barbell' ? 200 : 100;
+  store.weights[w] = Math.min(max, Math.max(0, Math.round((store.weights[w] + +b.dataset.d) * 10) / 10));
+  save(); syncToggles(); renderReady();
+};
+for (const b of sheet.querySelectorAll('[data-theme-opt]')) b.onclick = () => {
+  store.theme = b.dataset.themeOpt; save(); applyTheme();
+};
 
 $('toggleBtn').onclick = togglePause;
 $('restToggleBtn').onclick = togglePause;
@@ -433,7 +501,7 @@ $('exitBtn').onclick = exitSession;
 $('exitCancel').onclick = cancelExit;
 $('exitConfirm').onclick = () => {
   $('exitDialog').close(); saveProgress(); releaseWake(); window.speechSynthesis?.cancel();
-  document.body.classList.remove('rest'); document.querySelector('meta[name=theme-color]').content = '#16110e';
+  setRest(false);
   setView('ready'); renderReady();
 };
 $('exitDialog').addEventListener('cancel', e => { e.preventDefault(); cancelExit(); });
@@ -445,18 +513,6 @@ $('motionToggle').onclick = () => {
 };
 $('doneBtn').onclick = () => { setView('ready'); renderReady(); };
 $('againBtn').onclick = () => startSession();
-
-$('editWeights').onclick = () => {
-  $('barbellInput').value = store.weights.barbell; $('kettlebellInput').value = store.weights.kettlebell;
-  $('weightDialog').showModal();
-};
-$('weightDialog').addEventListener('close', () => {
-  if ($('weightDialog').returnValue !== 'save') return;
-  const clamp = (v, max, fb) => { const n = parseFloat(v); return Number.isFinite(n) ? Math.min(max, Math.max(0, n)) : fb; };
-  store.weights.barbell = clamp($('barbellInput').value, 200, store.weights.barbell);
-  store.weights.kettlebell = clamp($('kettlebellInput').value, 100, store.weights.kettlebell);
-  save(); renderReady();
-});
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
@@ -470,6 +526,7 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'ArrowLeft') prev();
 });
 
+applyTheme();
 renderReady();
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {

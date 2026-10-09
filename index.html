@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#16110e">
+<meta name="theme-color" content="#0f0f11">
 <meta name="description" content="좁은 공간에서 조용하게. 14개 동작과 함께하는 7분 운동 타이머.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,75 +17,76 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="app.css">
 </head>
-<body data-view="ready">
+<body data-view="ready" data-theme="lava">
 
 <!-- ① 준비 -->
 <div class="view ready" id="readyView">
   <header class="topbar">
     <div class="brand">QUIET SEVEN</div>
-    <div class="topbar-actions">
-      <button class="icon-btn" id="voiceToggle" aria-pressed="false" aria-label="음성 안내">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/><path class="off-slash" d="M4 4l16 16"/></svg>
-      </button>
-      <button class="icon-btn sound-btn" aria-pressed="false" aria-label="소리">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m22 9-6 6M16 9l6 6"/></svg>
-      </button>
-    </div>
+    <button class="icon-btn" id="settingsBtn" aria-label="설정" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    </button>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="운동 루틴">
-    <button role="tab" id="tab-weighted" data-routine="weighted" aria-selected="true">바벨 · 케틀벨</button>
-    <button role="tab" id="tab-body" data-routine="body" aria-selected="false" tabindex="-1">맨몸</button>
-  </nav>
-
   <main class="ready-body">
-    <section class="routine-head">
-      <div class="row-between">
-        <h1 id="routineTitle">전신 루틴</h1>
-        <button class="text-btn" id="editWeights">무게 편집</button>
+    <section class="hero">
+      <div class="caption accent" id="heroCaption">TODAY · 전신 루틴</div>
+      <div class="hero-time" id="heroTime">7:00</div>
+      <div class="hero-sub" id="heroSub"></div>
+      <div class="rhythm" id="rhythm" aria-hidden="true"></div>
+      <div class="rhythm-legend"><span id="rhythmLeft"></span><span id="rhythmRight"></span></div>
+    </section>
+
+    <section class="selectors" id="selectors">
+      <div class="seg" role="tablist" aria-label="운동 루틴">
+        <button role="tab" id="tab-weighted" data-routine="weighted" aria-selected="true">바벨 · 케틀벨</button>
+        <button role="tab" id="tab-body" data-routine="body" aria-selected="false" tabindex="-1">맨몸</button>
       </div>
-      <div class="chips" id="routineChips"></div>
-      <div class="durations" role="group" aria-label="운동 시간">
-        <button class="duration" data-work="20" aria-pressed="true"><strong>7분</strong><small>운동 20초 · 휴식 10초</small></button>
-        <button class="duration" data-work="30" aria-pressed="false"><strong>9분 20초</strong><small>운동 30초 · 휴식 10초</small></button>
+      <div class="seg" role="group" aria-label="운동 시간">
+        <button class="duration" data-work="20" aria-pressed="true">7분 <small>· 20/10</small></button>
+        <button class="duration" data-work="30" aria-pressed="false">9분 20초 <small>· 30/10</small></button>
       </div>
     </section>
 
-    <section class="resume" id="resumeCard" hidden>
-      <div class="caption">이어서 하기</div>
-      <div class="resume-row">
+    <section class="strip-block" id="stripBlock">
+      <div class="row-between strip-head">
+        <h2>14동작</h2>
+        <button class="text-btn muted" id="weightsText"></button>
+      </div>
+      <ol class="strip" id="strip"></ol>
+      <p class="note">썸네일을 누르면 그 동작부터 시작합니다.</p>
+    </section>
+
+    <section class="resume-block" id="resumeBlock" hidden>
+      <div class="resume-card">
+        <div class="thumb" id="resumeThumb"><img id="resumeImg" alt="" decoding="async"></div>
         <div>
+          <div class="caption accent" id="resumeLabel">NEXT</div>
           <div class="resume-name" id="resumeName"></div>
           <div class="muted small" id="resumeMeta"></div>
         </div>
-        <div class="resume-actions">
-          <button class="text-btn muted" id="discardResume">처음부터</button>
-          <button class="pill-btn primary small-pill" id="resumeBtn">이어서</button>
-        </div>
       </div>
+      <dl class="resume-info">
+        <div><dt>이어서 할 동작</dt><dd id="resumeRest"></dd></div>
+        <div><dt>운동 / 휴식</dt><dd id="resumeSplit"></dd></div>
+      </dl>
     </section>
 
-    <button class="first-card" id="firstCard">
-      <img id="firstImg" alt="" width="96" height="54" decoding="async">
-      <span class="first-text">
-        <span class="caption">FIRST</span>
-        <span class="first-name" id="firstName"></span>
-        <span class="muted small">이후 13동작</span>
-      </span>
-    </button>
-
-    <details class="routine-list">
-      <summary><span>전체 14동작</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
-      <ol id="routineList"></ol>
-      <p class="note">동작을 누르면 그 동작부터 시작합니다.</p>
-    </details>
-
-    <p class="note">시작 전 가볍게 몸을 풀어주세요. 무게가 부담되면 맨몸으로 진행하고, 통증이 있으면 중단하세요.</p>
+    <aside class="safety" id="safetyNote" hidden>
+      <p>시작 전 가볍게 몸을 풀어주세요. 무게가 부담되면 맨몸으로, 통증이 있으면 바로 중단하세요.</p>
+      <button class="text-btn" id="safetyOk">확인</button>
+    </aside>
   </main>
 
   <div class="ready-cta">
-    <button class="pill-btn cta" id="startBtn">운동 시작<span class="divider"></span><span id="startTotal">7:00</span></button>
-    <p class="note center" id="wakeNote">시작하면 화면 켜짐을 유지합니다</p>
+    <div class="cta-row">
+      <button class="round-btn sound-btn" aria-pressed="false" aria-label="소리 켜기">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="off" d="m22 9-6 6M16 9l6 6"/></svg>
+      </button>
+      <button class="pill-btn cta" id="startBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg><span id="startLabel">운동 시작</span></button>
+    </div>
+    <button class="text-btn muted big" id="discardResume" hidden>처음부터 다시</button>
+    <p class="note center" id="wakeNote" hidden></p>
   </div>
 </div>
 
@@ -202,16 +203,39 @@
   </div>
 </dialog>
 
-<dialog id="weightDialog" aria-labelledby="weightTitle">
-  <h2 id="weightTitle">무게 편집</h2>
-  <form method="dialog" id="weightForm">
-    <label class="field"><span>바벨</span><input type="number" inputmode="decimal" min="0" max="200" step="0.5" id="barbellInput"><em>kg</em></label>
-    <label class="field"><span>케틀벨</span><input type="number" inputmode="decimal" min="0" max="100" step="0.5" id="kettlebellInput"><em>kg</em></label>
-    <div class="dialog-actions">
-      <button class="pill-btn outline" value="cancel" formnovalidate>취소</button>
-      <button class="pill-btn primary" value="save" id="weightSave">저장</button>
-    </div>
-  </form>
+<dialog id="settingsSheet" class="sheet" aria-labelledby="settingsTitle">
+  <div class="sheet-grip" aria-hidden="true"></div>
+  <div class="row-between">
+    <h2 id="settingsTitle">설정</h2>
+    <button class="icon-btn ghost" id="settingsClose" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+
+  <div class="caption">안내</div>
+  <div class="set-row">
+    <div><div class="set-title">알림음</div><div class="set-sub">시작 · 휴식 · 마지막 3초</div></div>
+    <button class="switch" role="switch" id="soundSwitch" aria-checked="false" aria-label="알림음"><span></span></button>
+  </div>
+  <div class="set-row">
+    <div><div class="set-title">음성 안내</div><div class="set-sub">동작 이름과 다음 동작을 읽어줘요</div></div>
+    <button class="switch" role="switch" id="voiceSwitch" aria-checked="false" aria-label="음성 안내"><span></span></button>
+  </div>
+
+  <div class="caption">무게</div>
+  <div class="set-row">
+    <div class="set-title">바벨</div>
+    <div class="stepper"><button data-w="barbell" data-d="-2.5" aria-label="바벨 2.5kg 줄이기">−</button><output id="barbellVal">15</output><span>kg</span><button data-w="barbell" data-d="2.5" aria-label="바벨 2.5kg 늘리기">+</button></div>
+  </div>
+  <div class="set-row">
+    <div class="set-title">케틀벨</div>
+    <div class="stepper"><button data-w="kettlebell" data-d="-2" aria-label="케틀벨 2kg 줄이기">−</button><output id="kettlebellVal">12</output><span>kg</span><button data-w="kettlebell" data-d="2" aria-label="케틀벨 2kg 늘리기">+</button></div>
+  </div>
+
+  <div class="caption">테마</div>
+  <div class="themes" role="radiogroup" aria-label="테마">
+    <button class="theme-opt" role="radio" data-theme-opt="lava" aria-checked="true" style="background:#0f0f11;color:#f3f2f0"><span class="sw"><i style="background:#f2733a"></i><i style="background:#63d2d6"></i></span>라바</button>
+    <button class="theme-opt" role="radio" data-theme-opt="champagne" aria-checked="false" style="background:#16110e;color:#f3ece4"><span class="sw"><i style="background:#dcc8a4"></i><i style="background:#c9d2d8"></i></span>샴페인</button>
+    <button class="theme-opt" role="radio" data-theme-opt="emerald" aria-checked="false" style="background:#07130e;color:#e9f4ee"><span class="sw"><i style="background:#3ddc9c"></i><i style="background:#e8a46f"></i></span>에메랄드</button>
+  </div>
 </dialog>
 
 <script type="module" src="app.js"></script>
